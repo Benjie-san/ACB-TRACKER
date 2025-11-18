@@ -1,18 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Header from './components/Header.jsx';
-import Sidebar from './components/Sidebar.jsx';
+import { useEffect, useState } from "react";
+import { testConnection } from "./api";
+import Login from "./pages/Login";
 
 function App() {
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
+
+  // load saved session
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) setUser(JSON.parse(saved));
+  }, []);
+
+  
+  if (!user) {
+    return <Login onLogin={setUser} />;
+  }
 
   return (
-    <>
-      <Header />
-      <Sidebar />
-    </>
-  )
+      <div>
+        <h1>Welcome {user.username}</h1>
+        <p>Role: {user.role}</p>
+
+        <button
+          onClick={() => {
+            localStorage.removeItem("user");
+            setUser(null);
+          }}
+        >
+          Logout
+        </button>
+    </div>
+  );
+  
 }
 
-export default App
+export default App;
