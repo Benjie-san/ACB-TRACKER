@@ -9,7 +9,6 @@ export default function Login({ onLogin }) {
     async function handleSubmit(e) {
         e.preventDefault();
         setError("");
-        console.log(password)
         const res = await login(username, password);
 
         if (!res.success) {
